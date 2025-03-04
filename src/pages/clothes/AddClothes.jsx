@@ -1,139 +1,149 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
+import {useState} from "react";
 import apiClothesService from "./apiClothesService";
 
 const AddClothes = () => {
+    const {clothesId} = useParams();
+    const [name, setName] = useState("");
+    const [category, setCategory] = useState("");
+    const [brand, setBrand] = useState("");
+    const [color, setColor] = useState("");
+    const [size, setSize] = useState("");
+    const [material, setMaterial] = useState("");
+    const [price, setPrice] = useState("");
+    const [stock, setStock] = useState("");
+    const [gender, setGender] = useState("");
+    const [season, setSeason] = useState("");
     const navigate = useNavigate();
-    const [cName, setCName] = useState("");
-    const [cCategory, setCCategory] = useState("");
-    const [cBrand, setCBrand] = useState("");
-    const [cColor, setCColor] = useState("");
-    const [cSize, setCSize] = useState("");
-    const [cMaterial, setCMaterial] = useState("");
-    const [cPrice, setCPrice] = useState("");
-    const [cStock, setCStock] = useState("");
-    const [cGender, setCGender] = useState("");
-    const [cSeason, setCSeason] = useState("");
 
-    const addClothes = () => {
-        if (!cName || !cColor || !cStock || !cPrice || !cGender || !cSeason) {
-            alert("모든 필수 정보를 입려");
-            return;
+    const handleAdd = () => {
+        const content = {
+            cid: clothesId,
+            cname: name,
+            ccategory: category,
+            cbrand: brand,
+            ccolor: color,
+            cmaterial: material,
+            csize: size,
+            cprice: parseFloat(price),
+            cstock: parseInt(stock),
+            cgender: gender,
+            cseason: season
         }
 
-        const addContent = {
-            cname: cName,
-            ccategory: cCategory,
-            cbrand: cBrand,
-            ccolor: cColor,
-            csize: cSize,
-            cmaterial: cMaterial,
-            cprice: cPrice,
-            cstock: cStock,
-            cgender: cGender,
-            cseason: cSeason,
-        };
+        const emptyinput = [];
+        if (!content.cname.trim()) emptyinput.push("이름");
+        if (!content.ccategory.trim()) emptyinput.push("카테고리");
+        if (!content.cbrand.trim()) emptyinput.push("브랜드");
+        if (!content.ccolor.trim()) emptyinput.push("색상");
+        if (!content.cmaterial.trim()) emptyinput.push("소재");
+        if (!content.csize.trim()) emptyinput.push("사이즈");
+        if (content.cprice <= 0) emptyinput.push("가격");
+        if (content.cstock <= 0) emptyinput.push("수량");
 
-        apiClothesService.insertClothes(addContent, () => {
-            alert("추가되었습니다.");
-            navigate("/closeList");
-        });
-    };
+        if (emptyinput.length > 0) {
+            alert(`항목을 입력해주세요 : \n ${emptyinput.join(", ")}` );
+            return;
+        }
+        apiClothesService.insertClothes(clothesId, content, "추가 성공", "추가 실패");
+    }
 
     return (
-        <div>
-            <div>
-                <label>이름</label>
+        <div className="addclothes-container">
+            <h2>옷 추가하기</h2>
+            <div>이름 :
                 <input
                     type="text"
-                    value={cName}
-                    onChange={(e) => setCName(e.target.value)}
+                    placeholder="옷 이름"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
                 />
             </div>
 
             <div>
-                <label>카테고리</label>
-                <input
-                    type="text"
-                    value={cCategory}
-                    onChange={(e) => setCCategory(e.target.value)}
-                />
+                카테고리 : <input
+                type="text"
+                placeholder="카테고리"
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+            />
             </div>
 
             <div>
-                <label>브랜드</label>
-                <input
-                    type="text"
-                    value={cBrand}
-                    onChange={(e) => setCBrand(e.target.value)}
-                />
+                브랜드 : <input
+                type="text"
+                placeholder="브랜드"
+                value={brand}
+                onChange={(e) => setBrand(e.target.value)}
+            />
             </div>
 
             <div>
-                <label>색상</label>
-                <input
-                    type="text"
-                    value={cColor}
-                    onChange={(e) => setCColor(e.target.value)}
-                />
+                색상 : <input
+                type="text"
+                placeholder="색상"
+                value={color}
+                onChange={(e) => setColor(e.target.value)}
+            />
             </div>
 
             <div>
-                <label>사이즈</label>
-                <input
-                    type="text"
-                    value={cSize}
-                    onChange={(e) => setCSize(e.target.value)}
-                />
+                소재 : <input
+                type="text"
+                placeholder="소재"
+                value={material}
+                onChange={(e) => setMaterial(e.target.value)}
+            />
             </div>
 
             <div>
-                <label>재질</label>
-                <input
-                    type="text"
-                    value={cMaterial}
-                    onChange={(e) => setCMaterial(e.target.value)}
-                />
+                사이즈 : <input
+                type="text"
+                placeholder="사이즈"
+                value={size}
+                onChange={(e) => setSize(e.target.value)}
+            />
             </div>
 
             <div>
-                <label>가격</label>
-                <input
-                    type="text"
-                    value={cPrice}
-                    onChange={(e) => setCPrice(e.target.value)}
-                />
+                가격 : <input
+                type="number"
+                placeholder="가격"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+            />
             </div>
 
             <div>
-                <label>수량</label>
-                <input
-                    type="text"
-                    value={cStock}
-                    onChange={(e) => setCStock(e.target.value)}
-                />
+                수량 : <input
+                type="number"
+                placeholder="수량"
+                value={stock}
+                onChange={(e) => setStock(e.target.value)}
+            />
             </div>
 
             <div>
-                <label>성별</label>
-                <input
-                    type="text"
-                    value={cGender}
-                    onChange={(e) => setCGender(e.target.value)}
-                />
+                성별 : <select value={gender} onChange={(e) => setGender(e.target.value)}>
+                <option value="남성">남성</option>
+                <option value="여성">여성</option>
+                <option value="공용">공용</option>
+            </select>
             </div>
 
             <div>
-                <label>시즌</label>
-                <input
-                    type="text"
-                    value={cSeason}
-                    onChange={(e) => setCSeason(e.target.value)}
-                />
+                계절 : <select value={season} onChange={(e) => setSeason(e.target.value)}>
+                <option value="봄">봄</option>
+                <option value="여름">여름</option>
+                <option value="가을">가을</option>
+                <option value="겨울">겨울</option>
+                <option value="사계절">사계절</option>
+            </select>
             </div>
-            <button onClick={addClothes}>추가</button>
+
+            <button onClick={handleAdd}>추가하기</button>
         </div>
-    );
+    )
 };
 
 export default AddClothes;

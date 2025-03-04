@@ -1,55 +1,42 @@
-import {useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import apiClothesService from "./apiClothesService";
+import {Link, useNavigate, useParams} from "react-router-dom";
 
 const ClothesDetail = () => {
-    const { id } = useParams();
-    const [clothes, setClothes] = useState(null);
     const navigate = useNavigate();
+    const {clothesId}= useParams();
+    const [clothes, setClothes] = useState(null);
 
     useEffect(() => {
-        apiClothesService.getClothesById(id, setClothes);
-    }, [id]);
+        apiClothesService.getClothesById(clothesId, setClothes)
+    }, [clothesId])
 
-    if (!clothes) {
-        return (
-            <div>
-                Loading...
-            </div>
-        );
-    }
-
-    const deleteClothes = () => {
-        if (window.confirm("삭제하시겠습니까?")) {
-            apiClothesService.deleteClothes(id, () => {
-                alert("삭제되었습니다.");
-                navigate("/closeList");
-            })
-        } else {
-            alert("취소");
+    const handleDelete = () => {
+        if(window.confirm("정말 삭제 하시겠습니까?")) {
+            apiClothesService.deleteClothes(clothesId, "삭제 성공", "삭제실패")
+            navigate("/clothesList")
         }
     }
 
     return (
-        <div>
-            <h1>{clothes?.cname}</h1>
-            <p>{clothes?.ccategory}</p>
-            <p>{clothes?.cbrand}</p>
-            <p>{clothes?.ccolor}</p>
-            <p>{clothes?.csize}</p>
-            <p>{clothes?.cmaterial}</p>
-            <p>{clothes?.cstock}</p>
-            <p>{clothes?.cprice}</p>
-            <p>{clothes?.cgender}</p>
-            <p>{clothes?.cseason}</p>
+        <div className="clothesDetail-container">
+            <h3><strong>{clothes?.cname}</strong> 상세보기</h3>
+            <p>브랜드 : {clothes?.cbrand}</p>
+            <p>카테고리 : {clothes?.ccategory}</p>
+            <p>색상 : {clothes?.ccolor}</p>
+            <p>소재 : {clothes?.cmaterial}</p>
+            <p>사이즈 : {clothes?.csize}</p>
+            <p>가격 : {clothes?.cprice}원</p>
+            <p>수량 : {clothes?.cstock}</p>
 
-            <button onClick={deleteClothes}>삭제</button>
-            <button onClick={() => navigate(`/clothes/edit/${clothes.cid}`)}>수정</button>
+            <Link to={`/clothes/edit/${clothesId}`}>
+                <button>수정하기</button>
+            </Link>
 
+            <button onClick={handleDelete}>삭제</button>
+            <Link to={`/clothesList`}><button>돌아가기</button></Link>
         </div>
-    );
+    )
+};
 
-
-
-}
 export default ClothesDetail;
