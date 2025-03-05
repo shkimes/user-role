@@ -10,9 +10,9 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 import Home from "./Home";
 import Login from "./Login";
 import ProtectedRoute from "./ProtectedRoute";
-import CompanyPage from "../pages/CompanyPage";
-import AdminPage from "../pages/AdminPage";
-import UserPage from "../pages/UserPage";
+import CompanyPage from "../pages/role/CompanyPage";
+import AdminPage from "../pages/role/AdminPage";
+import UserPage from "../pages/role/UserPage";
 import PostList from "../pages/posts/PostList";
 import SearchPosts from "../pages/posts/SearchPosts";
 import InsertPost from "../pages/posts/InsertPost";
@@ -60,18 +60,14 @@ function PathRoute () {
                 <Route path="/products" element={<ProductList />} />>
                 <Route path="/products/search" element={<ProductSearch />} />
                 <Route path="/products/:productId" element={<ProductDetail />} />
+                <Route path="/products/add" element={<InsertPost />} />
 
 
-
-                {/* Clothes 경로 설정 */}
+                {/* Clothes 경로 설정*/}
                 <Route path="/clothesList" element={<ClothesList />} />
-                <Route path="/clothes/:clothesId" element={<ClothesDetail />} />
+                <Route path="/clothes/:id" element={<ClothesDetail />} />
                 <Route path="/clothes/add" element={<AddClothes />} />
-                <Route path="/clothes/edit/:clothesId" element={<EditClothes />} />
-
-
-
-
+                <Route path="/clothes/edit/:id" element={<EditClothes />} />
 
 
                 <Route path="/login" element={<Login setUser={setUser}  />} />

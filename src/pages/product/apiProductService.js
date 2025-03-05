@@ -7,24 +7,52 @@
 // 2. getSuggestions(keyword)
 // 3. getProductById(keyword)
 
-
 import axios from "axios";
 
 const API_PRODUCT_URL = "http://localhost:8080/api/products";
+
+
+/*
+apiProductService.js:27  Uncaught (in promise) TypeError: errCallback is not a function
+    at apiProductService.js:27:1
+    errCallback -> 함수가 아니면 문제가 발생
+    err 의 경우 매개변수 이름으로 전달받아서 작성 XX
+
+
+    AI 학습의 도움을 받을 경우
+
+    기능명칭:
+            function (callback, errCallback) {
+                // 메인기능명칭을 호출할 경우 수행할 기능 작성
+            }
+
+       ===> 여기서 errCallback 의 경우 백엔드에서 문제가 생겼을 때
+            해결해야할 문제
+            매개변수 명칭으로 받아오지 않음
+            err 관련 매개변수는 받아오지 않음 XXX
+    바른 예제
+            기능명칭:
+            function (keyword) {
+                // 메인기능명칭을 호출할 경우 수행할 기능 작성
+            }
+
+
+*/
+
 const apiProductService = {
     getProducts:
-        function (callback, errCallback) {
+        function (setProducts) {
             axios
                 .get(API_PRODUCT_URL)
                 .then( // 백엔드 연결 성공
                     (res) => {
-                        callback(res.data);
+                        console.log("data : " , res.data);
+                        setProducts(res.data);
                     }
                 )
                 .catch( // 백엔드  연결 실패
                     (err) => {
                         alert("백엔드에서 문제가 발생했습니다.");
-                        errCallback("제품 목록 보기 실패했습니다.");
                         console.error("err 발생한 문제를 개발자만 확인할 수 있도록 설정", err);
                     }
                 )
@@ -100,66 +128,3 @@ const apiProductService = {
         }
 }
 export default apiProductService;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// import axios from "axios";
-//
-//  CONST 방법
-//
-// // 상품 검색 API 호출
-// export const getProducts = (keyword) => {
-//     return axios
-//         .get(`http://localhost:8080/api/products/search`, { params: { keyword } })
-//         .then((response) => response.data)
-//         .catch((error) => {
-//             console.error("Error fetching products:", error);
-//
-//         });
-// };
-//
-// // 추천 검색어 API 호출
-// export const getSuggestions = (keyword) => {
-//     return axios
-//         .get(`http://localhost:8080/api/products/search`, { params: { keyword } })
-//         .then((response) => response.data?.map(p => p.productName) || [])
-//         .catch((error) => {
-//             console.error("Error fetching suggestions:", error);
-//             return [];
-//         });
-// };
-//
-// // 특정 상품 상세 조회 API 호출
-// export const getProductById = (productId) => {
-//     return axios
-//         .get(`http://localhost:8080/api/products/${productId}`)
-//         .then((response) => response.data)
-//         .catch((error) => {
-//             console.error("Error fetching product details:", error);
-//
-//         });
-// };
-//
