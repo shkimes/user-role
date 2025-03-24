@@ -12,7 +12,7 @@ const ClothesList = () => {
     const handleDelete = () => {
         apiClothesService.deleteClothes();
     }
-
+//
     return (
         <div className="py-5">
             <div className="container px-4 px-lg-5 mt-5">
